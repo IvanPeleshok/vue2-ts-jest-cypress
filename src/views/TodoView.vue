@@ -1,65 +1,49 @@
 <template>
   <div>
-    <input type="text" v-model="value" />
-    <button :disabled="!value.length" @click="createTodo">Send</button>
-    <ul v-for="todo of todos" :key="todo.id">
-      <li>
-        <span>
-          <input
-            type="checkbox"
-            :value="todo.checked"
-            @click="editTodo(todo)"
-          />
-        </span>
-        <span>{{ todo.text }}</span>
-        <button @click="removeTodo(todo.id)">Remove Item</button>
-      </li>
-    </ul>
+    <div>
+      <app-input :modelValue="value" @update:modelValue="updateValue" />
+      <app-button
+        text="Send"
+        :disabled="!value.length"
+        @click="create(value)"
+      />
+    </div>
+
+	<todo-list :todos="todos" @remove="remove">
+
+	</todo-list>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { ITodo } from "../interfaces/ITodo";
+import AppInput from "@/components/App/AppInput.vue";
+import AppButton from "@/components/App/AppButton.vue";
+import TodoList from '@/components/Todo/TodoList.vue';
+import { ITodo } from "@/interfaces/ITodo";
 
 @Component({
-  components: {},
+  components: {
+    AppInput,
+    AppButton,
+	TodoList
+  },
 })
 export default class HomeView extends Vue {
-  todos: ITodo[] = [];
+  todos: Array<ITodo> = [];
+
   value: string = "";
-
-  createTodo(): void {
-    this.todos.push({ id: Date.now(), text: this.value, checked: false });
-    this.resetValue();
+  updateValue(newValue: string) {
+    this.value = newValue;
   }
 
-  removeTodo(id: number): void {
-    this.todos = this.todos.filter((x) => x.id !== id);
-  }
-
-  editTodo({ id, checked }: ITodo): void {
-    let todo = this.todos.find((x) => x.id === id);
-    if (todo) {
-      todo.checked = checked;
-      this.resetValue();
-    }
-  }
-
-  private resetValue(): void {
+  create(text: string) {
+    this.todos.push({ text, checked: false, id: Date.now() });
     this.value = "";
+  }
+
+  remove(id: number) {
+	this.todos = this.todos.filter(x => x.id !== id);
   }
 }
 </script>
-
-<style scoped>
-li {
-  list-style: none;
-  margin: 0 auto;
-
-  display: flex;
-  justify-content: space-around;
-  
-  max-width: 500px;
-}
-</style>

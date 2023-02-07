@@ -11,11 +11,13 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
+	"strictPropertyInitialization": false,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
       "webpack-env",
-      "jest"
+      "jest",
+	  "cypress"
     ],
     "paths": {
       "@/*": [
@@ -35,7 +37,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "tests/e2e/support/commands.js", "tests/e2e/support/commands.js", "tests/e2e/support/index.js", "tests/e2e/support/index.js"  ],
   "exclude": [
     "node_modules"
   ]
